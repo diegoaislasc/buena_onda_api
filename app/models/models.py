@@ -160,3 +160,5 @@ artist_service = Table('artist_service', Base.metadata,
     Column('artist_id', Integer, ForeignKey('artist.id'), primary_key=True),
     Column('service_id', Integer, ForeignKey('service.id'), primary_key=True)
 )
+
+
