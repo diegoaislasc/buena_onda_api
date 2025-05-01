@@ -1,18 +1,18 @@
 # Fast API docs - https://fastapi.tiangolo.com/
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.models.models import Artist
-from app.schemas.schemas import ArtistCreate, ArtistResponse
 from typing import List
+
+from app.schemas.artist import ArtistCreate, ArtistResponse, ArtistUpdate
+# crud functions
+from app.crud.read import *
 from app.crud.create import create_artist as create_artist_crud
-from app.crud.read import get_artist_by_id, get_all_artists
-from app.schemas.schemas import ArtistUpdate
 from app.crud.update import update_artist as update_artist_crud
 from app.crud.delete import delete_artist as delete_artist_crud
 
 router = APIRouter(prefix="/artists", tags=["Artists"])
-
 
 # Dependency para obtener la sesión de la BD
 def get_db():
@@ -22,7 +22,7 @@ def get_db():
     finally:
         db.close()
 
-
+# POSTs
 @router.post("/", response_model=ArtistResponse)
 def create_artist(artist: ArtistCreate, db: Session = Depends(get_db)):
     new_artist = create_artist_crud(db, artist)
@@ -32,20 +32,21 @@ def create_artist(artist: ArtistCreate, db: Session = Depends(get_db)):
 
     return new_artist
 
-# obtener todos los artistas
+# GETs
 @router.get("/", response_model=List[ArtistResponse])
 def read_artists(db: Session = Depends(get_db)):
     return get_all_artists(db)
-
-# obtener un artista por ID
 @router.get("/{artist_id}", response_model=ArtistResponse)
 def read_artist_by_id(artist_id: int, db: Session = Depends(get_db)):
     artist = get_artist_by_id(db, artist_id)
     if not artist:
         raise HTTPException(status_code=404, detail="Artista no encontrado")
     return artist
+@router.get("/{artist_name}", response_model=ArtistResponse)
+def read_artist_by_name(artist_name: str, db: Session = Depends(get_db)):
+    artist = get_artist_by_name(db, artist_name)
 
-# actualizar un artista
+# PUT
 @router.put("/{artist_id}", response_model=ArtistResponse)
 def update_artist_endpoint(artist_id: int, artist_data: ArtistUpdate, db: Session = Depends(get_db)):
     updated_artist = update_artist_crud(db, artist_id, artist_data)
@@ -55,7 +56,7 @@ def update_artist_endpoint(artist_id: int, artist_data: ArtistUpdate, db: Sessio
 
     return updated_artist
 
-# eliminar un artista
+# DELETE
 @router.delete("/{artist_id}", response_model=ArtistResponse)
 def delete_artist_endpoint(artist_id: int, db: Session = Depends(get_db)):
     deleted_artist = delete_artist_crud(db, artist_id)
@@ -64,3 +65,7 @@ def delete_artist_endpoint(artist_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Artista no encontrado")
 
     return deleted_artist
+
+
+
+

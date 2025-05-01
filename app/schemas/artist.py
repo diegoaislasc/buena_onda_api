@@ -5,9 +5,33 @@
 from pydantic import BaseModel, EmailStr, constr
 from typing import Optional
 
+# ARTIST SCHEMAS
 class ArtistCreate(BaseModel):
     real_name: Optional[str] = None
     stage_name: constr(min_length=2, max_length=255)
+    music_genre: Optional[str] = None
+    country_of_origin: Optional[str] = None
+    email: Optional[EmailStr] = None
+    instagram_handle: Optional[constr(min_length=2, max_length=30)] = None
+
+    class Config:
+        orm_mode = True
+
+class ArtistResponse(BaseModel):
+    id: int
+    real_name: Optional[str] = None
+    stage_name: str
+    music_genre: Optional[str] = None
+    country_of_origin: Optional[str] = None
+    email: Optional[EmailStr] = None
+    instagram_handle: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+class ArtistUpdate(BaseModel):
+    real_name: Optional[str] = None
+    stage_name: Optional[constr(min_length=2, max_length=255)] = None
     music_genre: Optional[str] = None
     country_of_origin: Optional[str] = None
     email: Optional[EmailStr] = None

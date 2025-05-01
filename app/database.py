@@ -24,12 +24,12 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 # dependency to get DB session
-def get_db():
+""""def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
-        db.close()
+        db.close()"""
 
 print("Conexión exitosa")
 
