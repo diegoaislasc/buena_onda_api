@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import SessionLocal
-
+from artist import get_db
 # CRUD
 from app.schemas.album import AlbumCreate, AlbumUpdate, AlbumResponse
 
@@ -13,7 +13,12 @@ from app.crud.update import update_album as update_album_crud
 from app.crud.delete import delete_album as delete_album_crud
 from app.crud.read import *
 
-from artist import get_db
+"""def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()"""
 
 router = APIRouter(prefix="/albums", tags=["Albums"])
 
@@ -31,14 +36,14 @@ def get_albums(db: Session = Depends(get_db)):
     return get_all_albums(db)
 
 @router.get("/{album_id}", response_model=AlbumResponse)
-def get_album(album_id: int, db: Session = Depends(get_db)):
+def get_album_by_id(album_id: int, db: Session = Depends(get_db)):
     album = get_album_by_id(db, album_id)
     if not album:
         raise HTTPException(status_code=404, detail="Álbum no encontrado")
     return album
 
 @router.get("/search/{title}", response_model=AlbumResponse)
-def search_album(title: str, db: Session = Depends(get_db)):
+def get_album_by_name(title: str, db: Session = Depends(get_db)):
     album = get_album_by_name(db, title)
     if not album:
         raise HTTPException(status_code=404, detail="Álbum no encontrado")
