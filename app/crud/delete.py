@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.models import Artist, Album, Song, Songwriter, Producer
+from app.models.models import Artist, Album, Song, Songwriter, Producer, Service
 from typing import Optional, Type, Any
 
 
@@ -53,3 +53,12 @@ def delete_producer(db: Session, producer_id: int) -> Type[Producer] | None:
     db.delete(producer)
     db.commit()
     return producer
+
+# SERVICE
+def delete_service(db: Session, service_id: int) -> Type[Service] | None:
+    service = db.query(Service).filter(Service.id == service_id).first()
+    if not service:
+        return None
+    db.delete(service)
+    db.commit()
+    return service

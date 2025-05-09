@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.models import Artist, Album, Song, Songwriter, Producer
+from app.models.models import Artist, Album, Song, Songwriter, Producer, Service
 from typing import List, Optional, Type
 
 
@@ -49,4 +49,14 @@ def get_all_producers(db: Session) -> list[Type[Producer]]:
 
 def get_producer_by_name(db: Session, name: str) -> Producer | None:
     return db.query(Producer).filter(Producer.name == name).first()
+
+# READ service
+def get_service_by_id(db: Session, service_id: int) -> Service | None:
+    return db.query(Service).filter(Service.id == service_id).first()
+
+def get_all_services(db: Session) -> list[Type[Service]]:
+    return db.query(Service).all()
+
+def get_service_by_name(db: Session, name: str) -> Service | None:
+    return db.query(Service).filter(Service.name == name).first()
 

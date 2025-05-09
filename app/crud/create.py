@@ -87,4 +87,18 @@ def create_producer(db: Session, producer: ProducerCreate) -> Producer:
     db.refresh(new_producer)
     return new_producer
 
+# SERVICE
+def create_service(db: Session, service: ServiceCreate) -> Service:
+    existing = db.query(Service).filter(
+        Service.id == service.id
+    ).first()
+
+    if existing:
+        return None
+
+    new_service = Service(**service.dict())
+    db.add(new_service)
+    db.commit()
+    db.refresh(new_service)
+    return new_service
 

@@ -8,6 +8,8 @@ from typing import Optional, Type, Any
 from app.schemas.songwriter import SongwriterUpdate
 from app.schemas.producer import ProducerUpdate
 
+from app.schemas.service import ServiceUpdate
+
 
 # ARTIST
 def update_artist(db: Session, artist_id: int, artist_data: ArtistUpdate) -> Type[Artist] | None:
@@ -73,3 +75,14 @@ def update_producer(db: Session, producer_id: int, updates: ProducerUpdate) -> T
     db.commit()
     db.refresh(producer)
     return producer
+
+# SERVICE
+def update_service(db: Session, service_id: int, service_data: ServiceUpdate) -> Type[Service] | None:
+    service = db.query(Service).filter(Service.id == service_id).first()
+    if not service:
+        return None
+    for key, value in service_data.dict(exclude_unset=True).items():
+        setattr(service, key, value)
+    db.commit()
+    db.refresh(service)
+    return service
