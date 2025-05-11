@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from app.models.models import *
 from app.schemas.album import AlbumUpdate
 from app.schemas.artist import ArtistUpdate
+from app.schemas.event import EventUpdate
 from app.schemas.song import SongUpdate
 from typing import Optional, Type, Any
 
@@ -86,3 +87,37 @@ def update_service(db: Session, service_id: int, service_data: ServiceUpdate) ->
     db.commit()
     db.refresh(service)
     return service
+
+# STUDIO
+from app.models.models import Studio
+from app.schemas.studio import StudioUpdate
+
+#conexion a la bd, el id del estudio que se quiere modificar y los datos nuevos
+def update_studio(db: Session, studio_id: int, studio_data: StudioUpdate) -> Type[Studio] | None:
+    #Busca el estudio con ese id y si no lo encuentra devuelve none
+    studio = db.query(Studio).filter(Studio.id == studio_id).first()
+    if not studio:
+        return None
+
+    #actualiza los campos que el cliente mando excluyendo los otros
+    for key, value in studio_data.dict(exclude_unset=True).items():
+        setattr(studio,key,value)
+
+    db.commit()
+    db.refresh(studio)
+    return studio
+
+# EVENT
+from app.models.models import Event
+from app.schemas.event import EventUpdate
+def update_event(db: Session, event_id: int, event_data:EventUpdate) -> Type[Event] | None:
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        return None
+    for key, value in event_data.dict(exclude_unset=True).items():
+        setattr(event, key, value)
+
+    db.commit()
+    db.refresh(event)
+
+    return event

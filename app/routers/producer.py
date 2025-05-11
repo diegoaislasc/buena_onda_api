@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
-from sqlalchemy.orm import Session
-from artist import get_db
+
+
 from app.schemas.producer import ProducerCreate, ProducerUpdate, ProducerResponse
 from app.crud.create import create_producer as create_producer_crud
 from app.crud.read import *
@@ -8,6 +8,14 @@ from app.crud.update import update_producer as update_producer_crud
 from app.crud.delete import delete_producer as delete_producer_crud
 
 router = APIRouter(prefix="/producers", tags=["Producers"])
+
+from app.database import SessionLocal
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @router.post("/", response_model=ProducerResponse)
 def create_producer_endpoint(producer: ProducerCreate, db: Session = Depends(get_db)):

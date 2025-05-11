@@ -1,10 +1,8 @@
 # REST
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from typing import List
+
 
 from app.database import SessionLocal
-from artist import get_db
 # CRUD
 from app.schemas.album import AlbumCreate, AlbumUpdate, AlbumResponse
 
@@ -13,12 +11,12 @@ from app.crud.update import update_album as update_album_crud
 from app.crud.delete import delete_album as delete_album_crud
 from app.crud.read import *
 
-"""def get_db():
+def get_db():
     db = SessionLocal()
     try:
         yield db
     finally:
-        db.close()"""
+        db.close()
 
 router = APIRouter(prefix="/albums", tags=["Albums"])
 

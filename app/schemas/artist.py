@@ -17,6 +17,7 @@ class ArtistCreate(BaseModel):
     class Config:
         orm_mode = True
 
+
 class ArtistResponse(BaseModel):
     id: int
     real_name: Optional[str] = None

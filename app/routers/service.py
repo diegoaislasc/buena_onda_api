@@ -1,7 +1,7 @@
 
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
-from artist import get_db
+from app.routers.artist import get_db
 from app.schemas.service import ServiceCreate, ServiceResponse, ServiceUpdate
 # crud functions
 from app.crud.read import *
@@ -35,6 +35,9 @@ def get_service_by_id(service_id: int, db: Session = Depends(get_db)):
 @router.get("/{service_name}", response_model=ServiceResponse)
 def read_artist_by_name(service_name: str, db: Session = Depends(get_db)):
     service = get_service_by_name(db, service_name)
+    if not service:
+        raise HTTPException(status_code=404, detail="Servicio no encontrado")
+    return service
 
 # PUT
 @router.put("/{artist_id}", response_model=ServiceResponse)

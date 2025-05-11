@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from app.database import SessionLocal
-from artist import get_db
 
 from app.schemas.songwriter import SongwriterCreate, SongwriterResponse, SongwriterUpdate
 
@@ -13,6 +12,13 @@ from app.crud.delete import delete_songwriter as  delete_songwriter_crud
 
 router = APIRouter(prefix="/songwriters", tags=["Songwriters"])
 
+from app.database import SessionLocal
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @router.post("/", response_model=SongwriterResponse, status_code=201)
 def create_songwriter_endpoint(songwriter: SongwriterCreate, db: Session = Depends(get_db)):

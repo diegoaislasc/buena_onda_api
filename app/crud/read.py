@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.models import Artist, Album, Song, Songwriter, Producer, Service
+from app.models.models import Artist, Album, Song, Songwriter, Producer, Service, Event
 from typing import List, Optional, Type
 
 
@@ -60,3 +60,25 @@ def get_all_services(db: Session) -> list[Type[Service]]:
 def get_service_by_name(db: Session, name: str) -> Service | None:
     return db.query(Service).filter(Service.name == name).first()
 
+from app.models.models import Studio
+
+# READ STUDIO
+#define una funcion que devuelve una lista de todos los estudios en la bd
+def get_all_studios(db: Session) -> list[Type[Studio]]:
+    return db.query(Studio).all()  #hace la consulta select * from studio
+
+def get_studio_by_id(db: Session, studio_id : int) -> Optional[Studio]:
+    return db.query(Studio).filter(Studio.id == studio_id).first()
+
+def get_studio_by_name(db: Session, name: str) -> Optional[Studio]:
+    return db.query(Studio).filter(Studio.name == name).first()
+
+# READ EVENTs
+def get_all_events(db: Session) -> list[Type[Event]]:
+    return db.query(Event).all()
+
+def get_event_by_name(db: Session, event_name: int) -> Optional[Event] | None:
+    return db.query(Event).filter(Event.name == event_name).first()
+
+def get_event_by_id(db: Session, event_id: int) -> Optional[Event] | None:
+    return db.query(Event).filter(Event.id == event_id).first()

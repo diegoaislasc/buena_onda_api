@@ -62,3 +62,33 @@ def delete_service(db: Session, service_id: int) -> Type[Service] | None:
     db.delete(service)
     db.commit()
     return service
+
+# STUDIO
+from app.models.models import Studio
+# conexion a la base de datos, id del estudio a borrar y devuelve el objeto borrado o none en su defecto
+def delete_studio(db: Session, studio_id: int) -> Type[Studio] | None:
+    # Busca el estudio con ese id
+    studio = db.query(Studio).filter(Studio.id == studio_id).first()
+
+    if not studio:
+        return None
+
+    # Lo borra y guarda los cambios en la bd
+    db.delete(studio)
+    db.commit()
+
+    return studio
+
+# EVENT
+from app.models.models import Event
+def delete_event(db: Session, event_id: int) -> Type[Event] | None:
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        return None
+
+    db.delete(event)
+    db.commit()
+
+    return event
+
+
